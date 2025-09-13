@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36429.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaScheduleManagementWeb.Domain", "CinemaScheduleManagementWeb.Domain\CinemaScheduleManagementWeb.Domain.csproj", "{076179EF-151F-4E75-999E-28547289D52D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaScheduleManagementWeb.Application", "CinemaScheduleManagementWeb.Application\CinemaScheduleManagementWeb.Application.csproj", "{664604B1-219F-494D-9E58-8159B0FC83CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaScheduleManagementWeb.Infrastructure", "CinemaScheduleManagementWeb.Infrastructure\CinemaScheduleManagementWeb.Infrastructure.csproj", "{6564FA99-6189-4829-9A3C-BDA9391239C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaScheduleManagementWeb.Api", "CinemaScheduleManagementWeb.Api\CinemaScheduleManagementWeb.Api.csproj", "{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{076179EF-151F-4E75-999E-28547289D52D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{076179EF-151F-4E75-999E-28547289D52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{076179EF-151F-4E75-999E-28547289D52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{076179EF-151F-4E75-999E-28547289D52D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{664604B1-219F-494D-9E58-8159B0FC83CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{664604B1-219F-494D-9E58-8159B0FC83CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{664604B1-219F-494D-9E58-8159B0FC83CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{664604B1-219F-494D-9E58-8159B0FC83CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6564FA99-6189-4829-9A3C-BDA9391239C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6564FA99-6189-4829-9A3C-BDA9391239C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6564FA99-6189-4829-9A3C-BDA9391239C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6564FA99-6189-4829-9A3C-BDA9391239C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4706400-B0EC-41D2-B32C-3913B0EE4882}
+	EndGlobalSection
+EndGlobal
