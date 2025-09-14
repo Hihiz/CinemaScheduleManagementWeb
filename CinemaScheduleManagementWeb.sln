@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaScheduleManagementWeb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaScheduleManagementWeb.Api", "CinemaScheduleManagementWeb.Api\CinemaScheduleManagementWeb.Api.csproj", "{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaScheduleManagementWeb.Test", "CinemaScheduleManagementWeb.Test\CinemaScheduleManagementWeb.Test.csproj", "{925E5A38-5114-4F94-82F5-2E71133DBC33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC604B06-9BB7-49D5-8C22-19ED51F2E58D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{925E5A38-5114-4F94-82F5-2E71133DBC33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{925E5A38-5114-4F94-82F5-2E71133DBC33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{925E5A38-5114-4F94-82F5-2E71133DBC33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{925E5A38-5114-4F94-82F5-2E71133DBC33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
