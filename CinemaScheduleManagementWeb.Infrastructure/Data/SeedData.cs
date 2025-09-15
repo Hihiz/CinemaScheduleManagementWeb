@@ -1,5 +1,4 @@
-﻿using CinemaScheduleManagementWeb.Application.Services;
-using CinemaScheduleManagementWeb.Domain.Entities;
+﻿using CinemaScheduleManagementWeb.Domain.Entities;
 using CinemaScheduleManagementWeb.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -44,18 +43,20 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Data
 
                 CinemaSettingEntity cinemaSettingEntity = new CinemaSettingEntity
                 {
-                    Id = 1,
+                    //Id = 1,
                     OpenTime = new TimeSpan(09, 00, 00),
                     CloseTime = new TimeSpan(20, 00, 00)
                 };
 
                 await db.CinemaSettings.AddAsync(cinemaSettingEntity);
 
+                await db.SaveChangesAsync();
+
                 List<FilmEntity> filmsEntity = new List<FilmEntity>()
                 {
                     new FilmEntity
                     {
-                        Id = 1,
+                        //Id = 1,
                         Title = "Title1",
                         Duration = 10,
                         AgeLimit = 1,
@@ -65,7 +66,7 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Data
 
                      new FilmEntity
                     {
-                        Id = 2,
+                        //Id = 2,
                         Title = "Title2",
                         Duration = 60,
                         AgeLimit = 3,
@@ -76,42 +77,46 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Data
 
                 await db.Films.AddRangeAsync(filmsEntity);
 
+                await db.SaveChangesAsync();
+
                 List<GenreEntity> genresEntity = new List<GenreEntity>
                 {
                     new GenreEntity
                     {
-                        Id = 1,
+                        //Id = 1,
                         Title = "Title1"
                     },
 
                     new GenreEntity
                     {
-                        Id = 2,
+                        //Id = 2,
                         Title = "Title2"
                     },
                 };
 
                 await db.Genres.AddRangeAsync(genresEntity);
 
+                await db.SaveChangesAsync();
+
                 List<FilmGenreEntity> filmGenres = new List<FilmGenreEntity>()
                 {
                     new FilmGenreEntity
                     {
-                        Id = 1,
+                        //Id = 1,
                         FilmId = 1,
                         GenreId = 1
                     },
 
                     new FilmGenreEntity
                     {
-                        Id = 2,
+                        //Id = 2,
                         FilmId = 1,
                         GenreId = 2
                     },
 
                     new FilmGenreEntity
                     {
-                        Id = 3,
+                        //Id = 3,
                         FilmId = 2,
                         GenreId = 2
                     },
@@ -119,11 +124,13 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Data
 
                 await db.FilmGenres.AddRangeAsync(filmGenres);
 
+                await db.SaveChangesAsync();
+
                 List<HallEntity> hallEntity = new List<HallEntity>
                 {
                     new HallEntity
                     {
-                        Id = 1,
+                        //Id = 1,
                         Title = "Hall1",
                         TotalSeat = 10,
                         TechBreak = 10
@@ -131,7 +138,7 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Data
 
                     new HallEntity
                     {
-                        Id = 2,
+                        //Id = 2,
                         Title = "Hall2",
                         TotalSeat = 60,
                         TechBreak = 20
@@ -140,11 +147,13 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Data
 
                 await db.Halls.AddRangeAsync(hallEntity);
 
+                await db.SaveChangesAsync();
+
                 List<SessionEntity> sessionEntity = new List<SessionEntity>
                 {
                     new SessionEntity
                     {
-                        Id = 1,
+                        //Id = 1,
                         FilmId = 1,
                         HallId = 1,
                         SessionStart = DateTime.UtcNow,
@@ -155,7 +164,7 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Data
 
                     new SessionEntity
                     {
-                        Id = 2,
+                        //Id = 2,
                         FilmId = 2,
                         HallId = 1,
                         SessionStart = DateTime.UtcNow,
