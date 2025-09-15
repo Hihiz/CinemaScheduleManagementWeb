@@ -29,10 +29,10 @@ namespace CinemaScheduleManagementWeb.Test.Integration.Repository.Session
                 AgeLimit = 0,
                 Duration = 0,
                 MinPrice = 0,
-                MaxPrice = 500
+                MaxPrice = 0
             };
             // Act
-            var result = await filmRepository.GetFilmsFilterAsync("льм", filter);
+            var result = await filmRepository.GetFilmsFilterAsync("льм2", filter);
 
             // Assert
             Assert.NotNull(result);

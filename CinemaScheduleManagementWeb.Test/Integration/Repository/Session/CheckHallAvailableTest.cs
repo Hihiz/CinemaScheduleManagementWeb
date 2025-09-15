@@ -10,8 +10,8 @@
             var end = new DateTime(2025, 9, 12, 15, 10, 00, DateTimeKind.Utc);
 
             //  Act
-            var result = await sessionRepository.IsHallExistsAsync(1, start, end);
-            
+            var result = await hallRepository.IsHallExistsAsync(1, start, end);
+
             // Assert
             Assert.False(result);
         }
@@ -24,7 +24,7 @@
             var end = new DateTime(2025, 9, 12, 15, 30, 00, DateTimeKind.Utc);
 
             //  Act
-            var result = await sessionRepository.IsHallExistsAsync(1, start, end);
+            var result = await hallRepository.IsHallExistsAsync(1, start, end);
 
             // Assert
             Assert.True(result);
