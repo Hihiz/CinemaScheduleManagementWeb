@@ -63,7 +63,7 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                 .Where(s => s.SessionsEntity
                     .Any(s => s.Status == SessionStatusEnum.Active.ToString()));
 
-            query = ApplyFilterSessions(sessionFilterInput, query);
+            query = ApplyFilterFilms(sessionFilterInput, query);
 
             List<SessionOutput> result = await query
                 .Select(f => new SessionOutput
@@ -72,7 +72,24 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                     FilmTitle = f.Title,
                     AgeLimit = f.AgeLimit,
                     FilmDuration = f.Duration,
-                    SessionDetailsOutput = f.SessionsEntity.Select(s => new SessionDetailOutput
+                    SessionDetailsOutput = f.SessionsEntity
+                        .Where(s => sessionFilterInput.DateStart.HasValue && sessionFilterInput.DateEnd.HasValue
+                            ? s.SessionStart >= sessionFilterInput.DateStart &&
+                              s.SessionEnd <= sessionFilterInput.DateEnd
+                            : true)
+                        .Where(s => sessionFilterInput.DateStart.HasValue
+                            ? s.SessionStart >= sessionFilterInput.DateStart
+                            : true)
+                        .Where(s => sessionFilterInput.MinPrice > 0
+                            ? s.Price >= sessionFilterInput.MinPrice
+                            : true)
+                        .Where(s => sessionFilterInput.MaxPrice > 0
+                            ? s.Price <= sessionFilterInput.MaxPrice
+                            : true)
+                        .Where(s => sessionFilterInput.HollId > 0
+                            ? s.HallId == sessionFilterInput.HollId
+                            : true)
+                    .Select(s => new SessionDetailOutput
                     {
                         HallId = s.HallId,
                         HallTitle = s.HallEntity.Title,
@@ -83,10 +100,12 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                     }).OrderBy(sd => sd.SessionStart)
                     .ToList()
                 }).OrderBy(f => f.SessionDetailsOutput!.Min(sd => sd.SessionStart))
+                .Where(s => s.SessionDetailsOutput!.Any())
                 .ToListAsync();
 
             return result;
         }
+
 
         /// <inheritdoc />
         public async Task<SessionOutput> GetSessionByFilmIdAsync(int filmId)
@@ -133,26 +152,13 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
         #region Приватные методы.
 
         /// <summary>
-        /// Метод применяет фильтры к сеансам..
+        /// Метод применяет фильтры к фильмам.
         /// </summary>
         /// <param name="sessionFilterInput">Входная модель.</param>
         /// <param name="query">Запрос.</param>
-        private IQueryable<FilmEntity> ApplyFilterSessions(SessionFilterInput sessionFilterInput,
+        private IQueryable<FilmEntity> ApplyFilterFilms(SessionFilterInput sessionFilterInput,
             IQueryable<FilmEntity> query)
         {
-            // Фильтр по дате.
-            if (sessionFilterInput.DateStart.HasValue && sessionFilterInput.DateEnd.HasValue)
-            {
-                query = query.Where(f => f.SessionsEntity.Any(s => s.SessionStart >= sessionFilterInput.DateStart
-                    && s.SessionEnd <= sessionFilterInput.DateEnd));
-            }
-
-            else if (sessionFilterInput.DateStart.HasValue)
-            {
-                query = query.Where(f => f.SessionsEntity
-                    .Any(s => s.SessionStart >= sessionFilterInput.DateStart));
-            }
-
             // Фильтр по жанру.
             if (sessionFilterInput.GenreId > 0)
             {
@@ -170,27 +176,6 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
             if (sessionFilterInput.Duration > 0)
             {
                 query = query.Where(f => f.Duration >= sessionFilterInput.Duration);
-            }
-
-            // Фильтр по минимальной цене.
-            if (sessionFilterInput.MinPrice > 0)
-            {
-                query = query.Where(f => f.SessionsEntity
-                    .Any(s => s.Price >= sessionFilterInput.MinPrice));
-            }
-
-            // Фильтр по максимальной цене.
-            if (sessionFilterInput.MaxPrice > 0)
-            {
-                query = query.Where(f => f.SessionsEntity
-                    .Any(s => s.Price <= sessionFilterInput.MaxPrice));
-            }
-
-            // Фильтр по залу.
-            if (sessionFilterInput.HollId > 0)
-            {
-                query = query.Where(f => f.SessionsEntity
-                    .Any(s => s.HallId == sessionFilterInput.HollId));
             }
 
             return query;
