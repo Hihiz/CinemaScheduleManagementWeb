@@ -70,7 +70,11 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                     Title = f.Title,
                     Duration = f.Duration,
                     AgeLimit = f.AgeLimit,
-                    FilmGenresOutput = f.FilmGenresEntity.Select(fg => new FilmGenreOutput
+                    FilmGenresOutput = f.FilmGenresEntity
+                    .Where(fg => filterFilmInput.GenreId > 0
+                        ? fg.GenreId == filterFilmInput.GenreId
+                        : true)
+                    .Select(fg => new FilmGenreOutput
                     {
                         GenreId = fg.GenreId,
                         GenreTitle = fg.GenreEntity.Title
@@ -81,6 +85,12 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                     SessionDetailOutput = f.SessionsEntity
                     .Where(sd => sd.Status == SessionStatusEnum.Active.ToString())
                     .OrderBy(sd => sd.SessionStart)
+                    .Where(sd => filterFilmInput.MinPrice > 0
+                        ? sd.Price >= filterFilmInput.MinPrice
+                        : true)
+                    .Where(sd => filterFilmInput.MaxPrice > 0
+                        ? sd.Price <= filterFilmInput.MaxPrice
+                        : true)
                     .Select(sd => new SessionDetailOutput
                     {
                         HallId = sd.HallId,
@@ -179,19 +189,6 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                 query = query.Where(f => f.AgeLimit >= filterFilmInput.AgeLimit);
             }
 
-            // Фильтр по минимальной цене.
-            if (filterFilmInput.MinPrice > 0)
-            {
-                query = query.Where(f => f.SessionsEntity
-                    .Any(s => s.Price >= filterFilmInput.MinPrice));
-            }
-
-            // Фильтр по максимальной цене.
-            if (filterFilmInput.MaxPrice > 0)
-            {
-                query = query.Where(f => f.SessionsEntity
-                    .Any(s => s.Price <= filterFilmInput.MaxPrice));
-            }
 
             return query;
         }
