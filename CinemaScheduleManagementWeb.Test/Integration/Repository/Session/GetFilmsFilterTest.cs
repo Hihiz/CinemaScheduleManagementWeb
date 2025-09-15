@@ -25,14 +25,14 @@ namespace CinemaScheduleManagementWeb.Test.Integration.Repository.Session
             // Arrange
             var filter = new FilmFilterInput()
             {
-                GenreId = 0,
+                GenreId = 2,
                 AgeLimit = 0,
                 Duration = 0,
                 MinPrice = 0,
                 MaxPrice = 0
             };
             // Act
-            var result = await filmRepository.GetFilmsFilterAsync("льм2", filter);
+            var result = await filmRepository.GetFilmsFilterAsync("льм", filter);
 
             // Assert
             Assert.NotNull(result);

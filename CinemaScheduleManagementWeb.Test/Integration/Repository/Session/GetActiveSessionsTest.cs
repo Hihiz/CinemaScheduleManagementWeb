@@ -1,4 +1,5 @@
 ﻿using CinemaScheduleManagementWeb.Application.Dto.Intput.Session;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CinemaScheduleManagementWeb.Test.Integration.Repository.Session
 {
@@ -10,7 +11,12 @@ namespace CinemaScheduleManagementWeb.Test.Integration.Repository.Session
             // Arrange         
             var filter = new SessionFilterInput
             {
-                
+              /*  MaxPrice =  1000*/
+            
+                //HollId = 1,
+                AgeLimit = 1,
+                DateStart = new DateTime(2025, 09, 15, 9, 59, 00, DateTimeKind.Utc),
+                DateEnd = new DateTime(2025, 09, 15, 18, 50, 00, DateTimeKind.Utc),
             };
 
             // Act
