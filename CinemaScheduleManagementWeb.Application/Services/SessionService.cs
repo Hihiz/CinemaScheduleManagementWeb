@@ -17,21 +17,27 @@ namespace CinemaScheduleManagementWeb.Application.Services
         private readonly ISessionRepository _sessionRepository;
         private readonly IFilmRepository _filmRepository;
         private readonly ICinemaSettingRepository _cinemaSettingRepository;
+        private readonly IHallRepository _hallRepository;
 
         /// <summary>
         /// Конструктор.
         /// </summary>
         /// <param name="logger">Логгер.</param>
         /// <param name="sessionRepository">Репозиторий сеансов.</param>
+        /// <param name="filmRepository">Репозиторий фильмов.</param>
+        /// <param name="cinemaSettingRepository">Репозиторий настройки кинотеатра.</param>
+        /// <param name="hallRepository">Репозиторий залов.</param>
         public SessionService(ILogger<SessionService> logger,
             ISessionRepository sessionRepository,
             IFilmRepository filmRepository,
-            ICinemaSettingRepository cinemaSettingRepository)
+            ICinemaSettingRepository cinemaSettingRepository,
+            IHallRepository hallRepository)
         {
             _logger = logger;
             _sessionRepository = sessionRepository;
             _filmRepository = filmRepository;
             _cinemaSettingRepository = cinemaSettingRepository;
+            _hallRepository = hallRepository;
         }
 
         #region Публичные методы.
@@ -60,10 +66,11 @@ namespace CinemaScheduleManagementWeb.Application.Services
             {
                 if (sessionFilterInput is null)
                 {
-                    throw new InvalidOperationException("Недопустимое значение фидьтров.");
+                    throw new InvalidOperationException("Недопустимое значение фильтров.");
                 }
 
-                IEnumerable<SessionOutput> result = await _sessionRepository.GetSessionsAsync();
+                IEnumerable<SessionOutput> result = await _sessionRepository.GetActiveSessionsAsync(
+                    sessionFilterInput);
 
                 return result;
             }
@@ -159,7 +166,7 @@ namespace CinemaScheduleManagementWeb.Application.Services
                 throw new InvalidOperationException("Сеанс выходит за время работы кинотеатра.");
             }
 
-            bool isHallExists = await _sessionRepository.IsHallExistsAsync(sessionEntity.HallId,
+            bool isHallExists = await _hallRepository.IsHallExistsAsync(sessionEntity.HallId,
                 sessionEntity.SessionStart, sessionEntity.SessionEnd);
 
             if (isHallExists)

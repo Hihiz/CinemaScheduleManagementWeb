@@ -30,15 +30,6 @@ namespace CinemaScheduleManagementWeb.Application.Interfaces.Repositories
         Task<IEnumerable<SessionOutput>> GetActiveSessionsAsync(SessionFilterInput sessionFilterInput);
 
         /// <summary>
-        /// Метод проверяет занятость зала по времени.
-        /// </summary>
-        /// <param name="hallId">Id зала.</param>
-        /// <param name="sessionStart">Дата начала сеанса.</param>
-        /// <param name="sessionEnd">Дата завершения сеанса.</param>
-        /// <returns>Признак проверки.</returns>
-        Task<bool> IsHallExistsAsync(int hallId, DateTime sessionStart, DateTime sessionEnd);
-
-        /// <summary>
         /// Метод создает сеанс.
         /// </summary>
         /// <param name="sessionEntity">Модель сеанса.</param>

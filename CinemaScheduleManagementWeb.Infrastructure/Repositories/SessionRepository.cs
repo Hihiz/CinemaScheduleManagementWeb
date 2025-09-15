@@ -63,7 +63,7 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                 .Where(s => s.SessionsEntity
                     .Any(s => s.Status == SessionStatusEnum.Active.ToString()));
 
-            ApplyFilterSessions(sessionFilterInput, query);
+            query = ApplyFilterSessions(sessionFilterInput, query);
 
             List<SessionOutput> result = await query
                 .Select(f => new SessionOutput
@@ -120,29 +120,12 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
         }
 
         /// <inheritdoc />
-        public async Task<bool> IsHallExistsAsync(int hallId, DateTime sessionStart, DateTime sessionEnd)
-        {
-            int techBreak = (await _db.Halls
-                .AsNoTracking()
-                .FirstOrDefaultAsync(h => h.Id == hallId))!.TechBreak;
-
-            bool result = await _db.Sessions
-                .Where(s => s.HallId == hallId && s.Status == SessionStatusEnum.Active.ToString())
-                .AnyAsync(s =>
-                    sessionStart < s.SessionEnd.AddMinutes(techBreak)
-                    && sessionEnd > s.SessionStart
-                );
-
-            return result;
-        }
-
-        /// <inheritdoc />
         public async Task CreateSessionAsync(SessionEntity sessionEntity)
         {
             sessionEntity.Status = SessionStatusEnum.Active.ToString();
 
             await _db.Sessions.AddAsync(sessionEntity);
-            await _db.SaveChangesAsync();           
+            await _db.SaveChangesAsync();
         }
 
         #endregion
@@ -154,7 +137,8 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
         /// </summary>
         /// <param name="sessionFilterInput">Входная модель.</param>
         /// <param name="query">Запрос.</param>
-        private void ApplyFilterSessions(SessionFilterInput sessionFilterInput, IQueryable<FilmEntity> query)
+        private IQueryable<FilmEntity> ApplyFilterSessions(SessionFilterInput sessionFilterInput,
+            IQueryable<FilmEntity> query)
         {
             // Фильтр по дате.
             if (sessionFilterInput.DateStart.HasValue && sessionFilterInput.DateEnd.HasValue)
@@ -208,6 +192,8 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                 query = query.Where(f => f.SessionsEntity
                     .Any(s => s.HallId == sessionFilterInput.HollId));
             }
+
+            return query;
         }
 
         #endregion

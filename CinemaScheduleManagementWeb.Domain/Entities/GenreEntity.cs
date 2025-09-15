@@ -16,11 +16,6 @@ public class GenreEntity
     public string Title { get; set; } = null!;
 
     /// <summary>
-    /// Список фильмов.
-    /// </summary>
-    public ICollection<FilmEntity> FilmsEntity { get; set; } = new List<FilmEntity>();
-
-    /// <summary>
     /// Список жанров фильма.
     /// </summary>
     public virtual ICollection<FilmGenreEntity> FilmGenresEntity { get; set; } = new List<FilmGenreEntity>();

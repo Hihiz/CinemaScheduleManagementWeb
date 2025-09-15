@@ -61,7 +61,7 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
             IQueryable<FilmEntity> query = _db.Films
                 .AsNoTracking();
 
-            ApplyFilterFilms(searchText, filterFilmInput, query);
+            query = ApplyFilterFilms(searchText, filterFilmInput, query);
 
             List<FilmFilterOutput> result = await query
                 .Select(f => new FilmFilterOutput
@@ -150,7 +150,7 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
         /// <param name="searchText">Текст поиска.</param>
         /// <param name="filterFilmInput">Входная модель.</param>
         /// <param name="query">Запрос.</param>
-        private void ApplyFilterFilms(string searchText, FilmFilterInput filterFilmInput,
+        private IQueryable<FilmEntity> ApplyFilterFilms(string searchText, FilmFilterInput filterFilmInput,
             IQueryable<FilmEntity> query)
         {
             // Поиск.
@@ -192,6 +192,8 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
                 query = query.Where(f => f.SessionsEntity
                     .Any(s => s.Price <= filterFilmInput.MaxPrice));
             }
+
+            return query;
         }
 
         #endregion

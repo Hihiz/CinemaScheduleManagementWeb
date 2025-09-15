@@ -1,5 +1,6 @@
 ﻿using CinemaScheduleManagementWeb.Application.Dto.Output.Hall;
 using CinemaScheduleManagementWeb.Application.Interfaces.Repositories;
+using CinemaScheduleManagementWeb.Domain.Enums;
 using CinemaScheduleManagementWeb.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +38,23 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
              })
              .OrderByDescending(h => h.Id)
              .ToListAsync();
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> IsHallExistsAsync(int hallId, DateTime sessionStart, DateTime sessionEnd)
+        {
+            int techBreak = (await _db.Halls
+                .AsNoTracking()
+                .FirstOrDefaultAsync(h => h.Id == hallId))!.TechBreak;
+
+            bool result = await _db.Sessions
+                .Where(s => s.HallId == hallId && s.Status == SessionStatusEnum.Active.ToString())
+                .AnyAsync(s =>
+                    sessionStart < s.SessionEnd.AddMinutes(techBreak)
+                    && sessionEnd > s.SessionStart
+                );
 
             return result;
         }
