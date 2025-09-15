@@ -32,6 +32,24 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
                 comment: "Таблица настроек работы кинотеатра.");
 
             migrationBuilder.CreateTable(
+                name: "Films",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false, comment: "PK.")
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false, comment: "Наименование фильма."),
+                    Duration = table.Column<int>(type: "integer", nullable: false, comment: "Продолжительность фильма (в минутах)."),
+                    AgeLimit = table.Column<short>(type: "smallint", nullable: false, comment: "Возрастное ограничение фильма."),
+                    Status = table.Column<string>(type: "text", nullable: false, defaultValueSql: "'Active'::\"FilmStatusEnum\""),
+                    PosterUrl = table.Column<string>(type: "text", nullable: true, comment: "Постер фильма.")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("Films_pkey", x => x.Id);
+                },
+                comment: "Таблица фильмов.");
+
+            migrationBuilder.CreateTable(
                 name: "Genres",
                 columns: table => new
                 {
@@ -60,30 +78,6 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
                     table.PrimaryKey("Halls_pkey", x => x.Id);
                 },
                 comment: "Таблица залов.");
-
-            migrationBuilder.CreateTable(
-                name: "Films",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false, comment: "PK.")
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false, comment: "Наименование фильма."),
-                    Duration = table.Column<int>(type: "integer", nullable: false, comment: "Продолжительность фильма (в минутах)."),
-                    AgeLimit = table.Column<short>(type: "smallint", nullable: false, comment: "Возрастное ограничение фильма."),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    PosterUrl = table.Column<string>(type: "text", nullable: true, comment: "Постер фильма."),
-                    GenreEntityId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("Films_pkey", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Films_Genres_GenreEntityId",
-                        column: x => x.GenreEntityId,
-                        principalTable: "Genres",
-                        principalColumn: "Id");
-                },
-                comment: "Таблица фильмов.");
 
             migrationBuilder.CreateTable(
                 name: "FilmGenres",
@@ -121,7 +115,7 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
                     SessionStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Время начала сеанса."),
                     SessionEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Время окончания сеанса."),
                     Price = table.Column<decimal>(type: "numeric", nullable: false, comment: "Цена сеанса."),
-                    Status = table.Column<string>(type: "text", nullable: true)
+                    Status = table.Column<string>(type: "text", nullable: true, defaultValueSql: "'Active'::\"SessionStatusEnum\"")
                 },
                 constraints: table =>
                 {
@@ -150,11 +144,6 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Films_GenreEntityId",
-                table: "Films",
-                column: "GenreEntityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sessions_FilmId",
                 table: "Sessions",
                 column: "FilmId");
@@ -178,13 +167,13 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
                 name: "Sessions");
 
             migrationBuilder.DropTable(
+                name: "Genres");
+
+            migrationBuilder.DropTable(
                 name: "Films");
 
             migrationBuilder.DropTable(
                 name: "Halls");
-
-            migrationBuilder.DropTable(
-                name: "Genres");
         }
     }
 }

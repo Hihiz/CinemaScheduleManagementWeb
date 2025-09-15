@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250914230456_Initial")]
+    [Migration("20250915095452_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -70,16 +70,15 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasComment("Продолжительность фильма (в минутах).");
 
-                    b.Property<int?>("GenreEntityId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("PosterUrl")
                         .HasColumnType("text")
                         .HasComment("Постер фильма.");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValueSql("'Active'::\"FilmStatusEnum\"");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -88,8 +87,6 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("Films_pkey");
-
-                    b.HasIndex("GenreEntityId");
 
                     b.ToTable("Films", t =>
                         {
@@ -117,9 +114,9 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("FilmGenres_pkey");
 
-                    b.HasIndex("FilmId");
+                    b.HasIndex(new[] { "FilmId" }, "IX_FilmGenres_FilmId");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex(new[] { "GenreId" }, "IX_FilmGenres_GenreId");
 
                     b.ToTable("FilmGenres", t =>
                         {
@@ -211,26 +208,21 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
                         .HasComment("Время начала сеанса.");
 
                     b.Property<string>("Status")
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValueSql("'Active'::\"SessionStatusEnum\"");
 
                     b.HasKey("Id")
                         .HasName("Sessions_pkey");
 
-                    b.HasIndex("FilmId");
+                    b.HasIndex(new[] { "FilmId" }, "IX_Sessions_FilmId");
 
-                    b.HasIndex("HallId");
+                    b.HasIndex(new[] { "HallId" }, "IX_Sessions_HallId");
 
                     b.ToTable("Sessions", t =>
                         {
                             t.HasComment("Таблица сеансов.");
                         });
-                });
-
-            modelBuilder.Entity("CinemaScheduleManagementWeb.Domain.Entities.FilmEntity", b =>
-                {
-                    b.HasOne("CinemaScheduleManagementWeb.Domain.Entities.GenreEntity", null)
-                        .WithMany("FilmsEntity")
-                        .HasForeignKey("GenreEntityId");
                 });
 
             modelBuilder.Entity("CinemaScheduleManagementWeb.Domain.Entities.FilmGenreEntity", b =>
@@ -281,8 +273,6 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Migrations
             modelBuilder.Entity("CinemaScheduleManagementWeb.Domain.Entities.GenreEntity", b =>
                 {
                     b.Navigation("FilmGenresEntity");
-
-                    b.Navigation("FilmsEntity");
                 });
 
             modelBuilder.Entity("CinemaScheduleManagementWeb.Domain.Entities.HallEntity", b =>

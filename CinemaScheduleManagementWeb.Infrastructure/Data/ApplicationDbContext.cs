@@ -46,7 +46,8 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.AgeLimit).HasComment("Возрастное ограничение фильма.");
             entity.Property(e => e.Duration).HasComment("Продолжительность фильма (в минутах).");
             entity.Property(e => e.PosterUrl).HasComment("Постер фильма.");
-            entity.Property(e => e.Title).HasComment("Наименование фильма.")
+            entity.Property(e => e.Status).HasDefaultValueSql("'Active'::\"FilmStatusEnum\"");
+            entity.Property(e => e.Title).HasComment("Наименование фильма.");
         });
 
         modelBuilder.Entity<GenreEntity>(entity =>
@@ -62,21 +63,26 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<FilmGenreEntity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("FilmGenres_pkey");
+
             entity.ToTable(tb => tb.HasComment("Таблица жанров фильма."));
+
+            entity.HasIndex(e => e.FilmId, "IX_FilmGenres_FilmId");
+
+            entity.HasIndex(e => e.GenreId, "IX_FilmGenres_GenreId");
 
             entity.Property(e => e.Id).HasComment("PK.");
             entity.Property(e => e.FilmId).HasComment("FK на Id фильма.");
             entity.Property(e => e.GenreId).HasComment("FK на Id жанра.");
 
             entity.HasOne(d => d.FilmEntity).WithMany(p => p.FilmGenresEntity)
-               .HasForeignKey(d => d.FilmId)
-               .OnDelete(DeleteBehavior.ClientSetNull)
-               .HasConstraintName("Fk_Films_Id");
+                .HasForeignKey(d => d.FilmId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Fk_Films_Id");
 
             entity.HasOne(d => d.GenreEntity).WithMany(p => p.FilmGenresEntity)
-             .HasForeignKey(d => d.GenreId)
-             .OnDelete(DeleteBehavior.ClientSetNull)
-             .HasConstraintName("Fk_Genres_Id");
+                .HasForeignKey(d => d.GenreId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Fk_Genres_Id");
         });
 
         modelBuilder.Entity<HallEntity>(entity =>
@@ -97,13 +103,17 @@ public class ApplicationDbContext : DbContext
 
             entity.ToTable(tb => tb.HasComment("Таблица сеансов."));
 
+            entity.HasIndex(e => e.FilmId, "IX_Sessions_FilmId");
+
+            entity.HasIndex(e => e.HallId, "IX_Sessions_HallId");
+
             entity.Property(e => e.Id).HasComment("PK.");
             entity.Property(e => e.FilmId).HasComment("FK на Id фильма.");
             entity.Property(e => e.HallId).HasComment("FK на Id зала.");
             entity.Property(e => e.Price).HasComment("Цена сеанса.");
             entity.Property(e => e.SessionEnd).HasComment("Время окончания сеанса.");
             entity.Property(e => e.SessionStart).HasComment("Время начала сеанса.");
-
+            entity.Property(e => e.Status).HasDefaultValueSql("'Active'::\"SessionStatusEnum\"");
 
             entity.HasOne(d => d.FilmEntity).WithMany(p => p.SessionsEntity)
                 .HasForeignKey(d => d.FilmId)
