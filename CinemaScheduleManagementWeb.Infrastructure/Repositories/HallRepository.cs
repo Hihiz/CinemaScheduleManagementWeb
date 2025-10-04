@@ -1,10 +1,4 @@
-﻿using CinemaScheduleManagementWeb.Application.Dto.Output.Hall;
-using CinemaScheduleManagementWeb.Application.Interfaces.Repositories;
-using CinemaScheduleManagementWeb.Domain.Enums;
-using CinemaScheduleManagementWeb.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-
-namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
+﻿namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
 {
     /// <summary>
     /// Класс реализует методы репозитория зала.
@@ -23,24 +17,6 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
         }
 
         #region Публичные методы.
-
-        /// <inheritdoc />
-        public async Task<IEnumerable<HallOutput>> GetHallsAsync()
-        {
-            List<HallOutput> result = await _db.Halls
-             .AsNoTracking()
-             .Select(h => new HallOutput
-             {
-                 Id = h.Id,
-                 Title = h.Title,
-                 TotalSeat = h.TotalSeat,
-                 TechBreak = h.TechBreak
-             })
-             .OrderByDescending(h => h.Id)
-             .ToListAsync();
-
-            return result;
-        }
 
         /// <inheritdoc />
         public async Task<bool> IsHallExistsAsync(int hallId, DateTime sessionStart, DateTime sessionEnd)

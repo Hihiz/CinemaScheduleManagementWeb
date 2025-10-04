@@ -1,9 +1,4 @@
-﻿using CinemaScheduleManagementWeb.Application.Dto.Output.Hall;
-using CinemaScheduleManagementWeb.Application.Interfaces.Repositories;
-using CinemaScheduleManagementWeb.Application.Interfaces.Services;
-using Microsoft.Extensions.Logging;
-
-namespace CinemaScheduleManagementWeb.Application.Services
+﻿namespace CinemaScheduleManagementWeb.Application.Services
 {
     /// <summary>
     /// Класс реализует методы сервиса залов.
