@@ -1,20 +1,10 @@
-﻿using CinemaScheduleManagementWeb.Application.Dto.Intput.Session;
-using CinemaScheduleManagementWeb.Application.Dto.Output.Session;
-using CinemaScheduleManagementWeb.Application.Interfaces.Repositories;
-using CinemaScheduleManagementWeb.Domain.Entities;
-using CinemaScheduleManagementWeb.Domain.Enums;
-using CinemaScheduleManagementWeb.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-
-namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
+﻿namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
 {
     /// <summary>
     /// Класс реализует методы репозитория сеансов.
     /// </summary>
     public class SessionRepository : ISessionRepository
     {
-        private readonly ApplicationDbContext _db;
-
         /// <summary>
         /// Конструктор.
         /// </summary>
@@ -25,35 +15,6 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
         }
 
         #region Публичные методы.
-
-        /// <inheritdoc />
-        public async Task<IEnumerable<SessionOutput>> GetSessionsAsync()
-        {
-            List<SessionOutput> result = await _db.Films
-                 .AsNoTracking()
-                 .Select(s => new SessionOutput
-                 {
-                     FilmId = s.Id,
-                     FilmTitle = s.Title,
-                     AgeLimit = s.AgeLimit,
-                     FilmDuration = s.Duration,
-                     SessionDetailsOutput = s.SessionsEntity.Select(sd => new SessionDetailOutput
-                     {
-                         HallId = sd.HallId,
-                         HallTitle = sd.HallEntity.Title,
-                         SessionStart = sd.SessionStart,
-                         SessionEnd = sd.SessionEnd,
-                         Price = sd.Price,
-                         Status = sd.Status
-                     })
-                     .OrderByDescending(sd => sd.SessionStart)
-                     .ToList()
-                 })
-                 .OrderByDescending(r => r.FilmId)
-                 .ToListAsync();
-
-            return result;
-        }
 
         /// <inheritdoc />
         public async Task<IEnumerable<SessionOutput>> GetActiveSessionsAsync(SessionFilterInput sessionFilterInput)
@@ -106,80 +67,9 @@ namespace CinemaScheduleManagementWeb.Infrastructure.Repositories
             return result;
         }
 
-
-        /// <inheritdoc />
-        public async Task<SessionOutput> GetSessionByFilmIdAsync(int filmId)
-        {
-            SessionOutput? result = await _db.Films
-                .AsNoTracking()
-                .Where(f => f.Id == filmId)
-                .Select(s => new SessionOutput
-                {
-                    FilmId = s.Id,
-                    FilmTitle = s.Title,
-                    AgeLimit = s.AgeLimit,
-                    FilmDuration = s.Duration,
-                    SessionDetailsOutput = s.SessionsEntity
-                        .Where(s => s.Status == SessionStatusEnum.Active.ToString())
-                        .Select(sd => new SessionDetailOutput
-                        {
-                            HallId = sd.HallId,
-                            HallTitle = sd.HallEntity.Title,
-                            SessionStart = sd.SessionStart,
-                            SessionEnd = sd.SessionEnd,
-                            Price = sd.Price,
-                            Status = sd.Status
-                        })
-                        .OrderByDescending(sd => sd.SessionStart)
-                        .ToList()
-                })
-                .FirstOrDefaultAsync();
-
-            return result!;
-        }
-
-        /// <inheritdoc />
-        public async Task CreateSessionAsync(SessionEntity sessionEntity)
-        {
-            sessionEntity.Status = SessionStatusEnum.Active.ToString();
-
-            await _db.Sessions.AddAsync(sessionEntity);
-            await _db.SaveChangesAsync();
-        }
-
         #endregion
 
         #region Приватные методы.
-
-        /// <summary>
-        /// Метод применяет фильтры к фильмам.
-        /// </summary>
-        /// <param name="sessionFilterInput">Входная модель.</param>
-        /// <param name="query">Запрос.</param>
-        private IQueryable<FilmEntity> ApplyFilterFilms(SessionFilterInput sessionFilterInput,
-            IQueryable<FilmEntity> query)
-        {
-            // Фильтр по жанру.
-            if (sessionFilterInput.GenreId > 0)
-            {
-                query = query.Where(f => f.FilmGenresEntity
-                    .Any(fg => fg.GenreId == sessionFilterInput.GenreId));
-            }
-
-            // Фильтр по возрастному ограничению.
-            if (sessionFilterInput.AgeLimit > 0)
-            {
-                query = query.Where(f => f.AgeLimit >= sessionFilterInput.AgeLimit);
-            }
-
-            // Фильтр по продолжительность.
-            if (sessionFilterInput.Duration > 0)
-            {
-                query = query.Where(f => f.Duration >= sessionFilterInput.Duration);
-            }
-
-            return query;
-        }
 
         #endregion
     }

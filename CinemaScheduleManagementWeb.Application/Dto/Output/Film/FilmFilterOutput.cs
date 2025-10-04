@@ -1,7 +1,4 @@
-﻿using CinemaScheduleManagementWeb.Application.Dto.Output.Session;
-using CinemaScheduleManagementWeb.Domain.Enums;
-
-namespace CinemaScheduleManagementWeb.Application.Dto.Output.Film
+﻿namespace CinemaScheduleManagementWeb.Application.Dto.Output.Film
 {
     /// <summary>
     /// Класс выходной модели фильмов с примененными фильтрами.
@@ -12,22 +9,7 @@ namespace CinemaScheduleManagementWeb.Application.Dto.Output.Film
         /// Id фильма.
         /// </summary>
         public int Id { get; set; }
-
-        /// <summary>
-        /// Наименование фильма.
-        /// </summary>
-        public string? Title { get; set; }
-
-        /// <summary>
-        /// Продолжительность фильма (в минутах).
-        /// </summary>
-        public int Duration { get; set; }
-
-        /// <summary>
-        /// Возрастное ограничение фильма.
-        /// </summary>
-        public short AgeLimit { get; set; }
-
+        
         /// <summary>
         /// Список жанров фильма.
         /// </summary>

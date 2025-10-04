@@ -11,26 +11,6 @@ public class FilmEntity
     public int Id { get; set; }
 
     /// <summary>
-    /// Наименование фильма.
-    /// </summary>
-    public string Title { get; set; } = null!;
-
-    /// <summary>
-    /// Продолжительность фильма (в минутах).
-    /// </summary>
-    public int Duration { get; set; }
-
-    /// <summary>
-    /// Возрастное ограничение фильма.
-    /// </summary>
-    public short AgeLimit { get; set; }
-
-    /// <summary>
-    /// Статус фильма.
-    /// </summary>
-    public string Status { get; set; } = null!;
-
-    /// <summary>
     /// Постер фильма.
     /// </summary>
     public string? PosterUrl { get; set; }
